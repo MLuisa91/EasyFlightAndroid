@@ -1,0 +1,135 @@
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/drawerLayout"
+    tools:context=".activity.NuevaReservaActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/menu"/>
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Spinner
+                android:layout_height="50dp"
+                android:layout_width="290dp"
+                android:id="@+id/searchOrigen"
+                android:background="@drawable/edittext_custom"
+                android:drawableLeft="@drawable/ic_baseline_search_24"
+                android:drawableRight="@drawable/ic_baseline_clear_24"
+                android:drawablePadding="8dp"
+                android:hint="Origen"
+                android:padding="8dp"
+                android:textColor="@color/black"
+                android:textColorHighlight="@color/cardview_dark_background"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp" />
+
+            <Spinner android:layout_width="290dp"
+                android:layout_height="50dp"
+                android:id="@+id/searchDestino"
+                android:background="@drawable/edittext_custom"
+                android:drawableLeft="@drawable/ic_baseline_search_24"
+                android:drawableRight="@drawable/ic_baseline_clear_24"
+                android:drawablePadding="8dp"
+                android:hint="Destino"
+                android:layout_marginStart="20dp"
+                android:padding="8dp"
+                android:textColor="@color/black"
+                android:textColorHighlight="@color/cardview_dark_background"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_toEndOf="@id/searchOrigen"
+                android:layout_toRightOf="@id/searchOrigen">
+            </Spinner>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText android:layout_width="290dp"
+                android:layout_height="50dp"
+                android:id="@+id/txtSearchFechaSalida"
+                android:background="@drawable/edittext_custom"
+                android:drawableLeft="@drawable/ic_baseline_search_24"
+                android:drawableRight="@drawable/ic_baseline_clear_24"
+                android:drawablePadding="8dp"
+                android:hint="Fecha salida"
+                android:layout_marginStart="20dp"
+                android:padding="8dp"
+                android:textColor="@color/black"
+                android:textColorHighlight="@color/cardview_dark_background"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp">
+            </EditText>
+
+            <EditText android:layout_width="290dp"
+                android:layout_height="50dp"
+                android:id="@+id/txtSearchFechaVuelta"
+                android:background="@drawable/edittext_custom"
+                android:drawableLeft="@drawable/ic_baseline_search_24"
+                android:drawableRight="@drawable/ic_baseline_clear_24"
+                android:drawablePadding="8dp"
+                android:hint="Fecha vuelta"
+                android:layout_marginStart="20dp"
+                android:padding="8dp"
+                android:textColor="@color/black"
+                android:textColorHighlight="@color/cardview_dark_background"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_toEndOf="@id/txtSearchFechaSalida"
+                android:layout_toRightOf="@id/txtSearchFechaSalida">
+            </EditText>
+
+        </LinearLayout>
+
+
+        <Button android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/search_button"
+            android:text="Buscar"
+            android:textSize="18sp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="@color/green"
+            android:textColor="@color/white"
+            app:cornerRadius="20dp"></Button>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="12dp"
+            android:id="@+id/listaVuelos"
+            android:scrollbars="vertical"
+            android:layout_below="@id/buscador"
+            android:layout_marginTop="10dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_gravity="start">
+
+        <include
+            layout="@layout/menu_navigation"></include>
+
+
+    </RelativeLayout>
+
+
+
+
+</androidx.drawerlayout.widget.DrawerLayout>
