@@ -1,8 +1,9 @@
 package com.example.flightextrem.components;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class ListVuelos {
+public class ListVuelos implements Serializable{
     private String origen;
     private String destino;
     private LocalDate fechaSalida;

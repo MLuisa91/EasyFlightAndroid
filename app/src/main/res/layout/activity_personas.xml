@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recPersona"
+    android:layout_marginStart="20dp"
+    android:layout_marginLeft="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="10dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp"
+    android:layout_marginRight="12dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/icPasajero"
+            android:src="@drawable/ic_baseline_person_24"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded">
+
+        </com.google.android.material.imageview.ShapeableImageView>
+
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:layout_width="300dp"
+            android:layout_height="30dp"
+            android:id="@+id/recNombrePasajero"
+            android:text="Alejandro González Macías"
+            android:textColor="@color/green"
+            android:textSize="20sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@id/icPasajero"
+            android:layout_toRightOf="@id/icPasajero" />
+
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:id="@+id/recPrecioBillete"
+            android:text="120€"
+            android:textColor="@color/green"
+            android:textSize="30sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@id/recNombrePasajero"
+            android:layout_toRightOf="@id/icPasajero" />
+
+        <TextView
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/recEsAdulto"
+            android:text="Adulto"
+            android:textColor="@color/green"
+            android:textSize="16sp"
+            android:layout_toEndOf="@id/icPasajero"
+            android:layout_toRightOf="@id/icPasajero"
+            android:layout_below="@id/recNombrePasajero"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:maxLines="1"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtExtras"
+            android:text="Extras:"
+            android:textColor="@color/green"
+            android:textSize="20sp"
+            android:layout_toEndOf="@id/icPasajero"
+            android:layout_toRightOf="@id/icPasajero"
+            android:layout_below="@id/recEsAdulto"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"/>
+
+        <TextView
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/recExtras"
+            android:text="Mascota, Maleta de mano, Asiento pasillo"
+            android:textColor="@color/green"
+            android:textSize="20sp"
+            android:layout_toEndOf="@id/txtExtras"
+            android:layout_toRightOf="@id/txtExtras"
+            android:layout_below="@id/recEsAdulto"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/icExtras"
+            android:src="@drawable/ic_baseline_add_circle_outline_24"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:scaleType="centerCrop"
+            android:layout_toEndOf="@id/recExtras"
+            android:layout_toRightOf="@id/recExtras"
+            android:layout_below="@id/recEsAdulto"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded">
+
+        </com.google.android.material.imageview.ShapeableImageView>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,4 +1,4 @@
-package com.example.flightextrem.service.response;
+package com.example.flightextrem.service.pojo;
 
 public class Post {
 

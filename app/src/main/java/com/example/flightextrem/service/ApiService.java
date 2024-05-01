@@ -1,6 +1,6 @@
 package com.example.flightextrem.service;
 
-import com.example.flightextrem.service.response.Post;
+import com.example.flightextrem.service.pojo.Post;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -10,11 +10,8 @@ import retrofit2.http.Path;
 
 public interface ApiService {
 
-    @GET("posts/{id}")
-    Call<Post> getPost(@Path("id") int postId);
-
-    @GET("hola/mundo")
-    Call<String> callHolaMundo();
+    @GET("usuarios/{user}/{password}")
+    Call<String> callUsuarioByUserAndPassword(@Path("user") String user,@Path("password") String password);
 
     @POST("posts")
     Call<Post> createPost(@Body Post post);

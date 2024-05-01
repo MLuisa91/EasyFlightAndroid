@@ -1,10 +1,9 @@
-<androidx.drawerlayout.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/drawerLayout"
     tools:context=".activity.ReservasActivity">
 
     <LinearLayout
@@ -12,29 +11,50 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include
-            layout="@layout/menu"/>
+        <include layout="@layout/menu" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Reservas"
-            android:layout_gravity="center"
-            android:layout_marginTop="400dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:text="Reservas realizadas:"
             android:textColor="@color/green"
-            android:textSize="36sp"
-            ></TextView>
+            android:textSize="18sp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/listaReservas"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/aniadir_button"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:paddingLeft="12dp"
+                    android:scrollbars="vertical">
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="300dp"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:layout_gravity="start">
+        android:layout_gravity="start"
+        android:background="@color/white">
 
-        <include
-            layout="@layout/menu_navigation"></include>
+        <include layout="@layout/menu_navigation"></include>
 
     </RelativeLayout>
 

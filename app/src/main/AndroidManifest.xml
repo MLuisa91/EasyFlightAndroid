@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FlightExtrem"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.RegistroActivity"></activity>
+        <activity android:name=".activity.DetailActivity"></activity>
+        <activity android:name=".activity.RegistroActivity" />
         <activity android:name=".activity.NuevaReservaActivity" />
         <activity android:name=".activity.DatosActivity" />
         <activity android:name=".activity.ReservasActivity" />
