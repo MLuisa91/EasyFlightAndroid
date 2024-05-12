@@ -9,21 +9,22 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.flightextrem.R;
+import com.example.flightextrem.service.pojo.Reserva;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.List;
 
 public class ReservasAdapter extends RecyclerView.Adapter<ReservasAdapter.ViewHolder> {
-    private List<ListReservas> mData;
+    private List<Reserva> mData;
     private LayoutInflater mInflater;
     private Context context;
     final ReservasAdapter.OnItemClickListener listener;
 
     public interface OnItemClickListener {
-        void onItemClick(ListReservas item);
+        void onItemClick(Reserva item);
     }
 
-    public ReservasAdapter(List<ListReservas> itemList, Context context, ReservasAdapter.OnItemClickListener listener) {
+    public ReservasAdapter(List<Reserva> itemList, Context context, ReservasAdapter.OnItemClickListener listener) {
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.mData = itemList;
@@ -47,7 +48,7 @@ public class ReservasAdapter extends RecyclerView.Adapter<ReservasAdapter.ViewHo
         holder.bindData(mData.get(position));
     }
 
-    public void setItems(List<ListReservas> vuelos) {
+    public void setItems(List<Reserva> vuelos) {
         mData = vuelos;
     }
 
@@ -65,8 +66,8 @@ public class ReservasAdapter extends RecyclerView.Adapter<ReservasAdapter.ViewHo
             fechaReserva = vista.findViewById(R.id.recFechaReserva);
         }
 
-        void bindData(final ListReservas reservas) {
-            idReserva.setText(reservas.getIdReserva());
+        void bindData(final Reserva reservas) {
+            idReserva.setText(reservas.getId());
             precio.setText(reservas.getTotal().toString().concat(" EUR"));
             fechaReserva.setText(reservas.getFechaReserva().toString());
             itemView.setOnClickListener(new View.OnClickListener() {

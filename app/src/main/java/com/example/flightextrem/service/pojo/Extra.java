@@ -27,4 +27,8 @@ public class Extra implements Serializable {
 
     private Set<ReservaExtra> reservaExtras;
 
+    public String toString(){
+        return this.nombre + "(" + coste.toString() + " €)";
+    }
+
 }

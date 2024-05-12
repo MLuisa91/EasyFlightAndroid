@@ -1,14 +1,14 @@
 package com.example.flightextrem.service.pojo;
 
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,4 +29,11 @@ public class Vuelo implements Serializable {
     private LocalTime horaLlegada;
 
     private Avion avion;
+    private Double precio;
+
+    public Vuelo(String id) {
+        this.id = id;
+    }
+
+
 }

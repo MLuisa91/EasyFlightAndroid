@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Setter
 public class UsuarioRolPK implements Serializable {
 
-    private String usuarioId;
+    private Integer usuarioId;
 
     private Integer rolId;
 

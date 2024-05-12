@@ -17,4 +17,10 @@ public class Aeropuerto implements Serializable {
     private Integer id;
 
     private String nombre;
+
+    public String toString() {
+        return nombre;
+
+    }
+
 }

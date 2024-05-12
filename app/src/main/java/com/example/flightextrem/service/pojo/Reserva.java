@@ -1,18 +1,20 @@
 package com.example.flightextrem.service.pojo;
 
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Set;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Reserva {
+public class Reserva implements Serializable {
 
 
     private String id;
@@ -28,5 +30,7 @@ public class Reserva {
     private Double total;
 
     private Set<ReservaExtra> reservaExtras;
+    private LocalDate fechaReserva;
+    Set<ReservaViajero> reservaViajeros;
 
 }

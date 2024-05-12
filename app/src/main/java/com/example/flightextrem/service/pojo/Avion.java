@@ -20,4 +20,5 @@ public class Avion implements Serializable {
     private String modelo;
 
     private Integer pasajeros;
+
 }

@@ -1,28 +1,28 @@
 package com.example.flightextrem.service.pojo;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.time.LocalDate;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-public class Rol implements Serializable {
+public class Viajero implements Serializable {
+
 
     private Integer id;
 
+    private String dni;
+
     private String nombre;
 
-    private Set<UsuarioRol> usuarioRol;
+    private String apellidos;
 
-    public Rol(Integer id){
-        this.id = id;
-    }
+    private LocalDate fechaNacimiento;
 
 }

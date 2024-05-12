@@ -15,7 +15,8 @@ import java.util.Set;
 @Setter
 public class Usuario implements Serializable {
 
-    private String idDni;
+    private Integer id;
+    private String dni;
     private String nombre;
     private String apellidos;
     private String user;
@@ -26,7 +27,8 @@ public class Usuario implements Serializable {
 
     private Set<UsuarioRol> usuarioRol;
 
-    public Boolean getIsAdministrador(){
-        return Boolean.TRUE;
+    public Usuario (Integer id){
+        this.id = id;
     }
+
 }

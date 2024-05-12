@@ -27,5 +27,13 @@ public class Oferta implements Serializable {
 
     private LocalDate fechaFinal;
 
+    private Vuelo vuelo;
+
+    public Oferta (Integer id, String nombre, String descripcion){
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
+
 
 }

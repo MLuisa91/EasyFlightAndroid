@@ -3,8 +3,8 @@ package com.example.flightextrem.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class JsonConverter<T> {
 
@@ -14,6 +14,8 @@ public class JsonConverter<T> {
     public JsonConverter(Class<T> tClass) {
         super();
         objectMapper.configure(MapperFeature.CAN_OVERRIDE_ACCESS_MODIFIERS, false);
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        objectMapper.registerModule(new JavaTimeModule());
         this.tClass = tClass;
     }
 
@@ -46,7 +48,7 @@ public class JsonConverter<T> {
      * @return
      * @throws JsonProcessingException
      */
-    public String objectToJson(Object object) throws IOException {
+    public String objectToJson(Object object) throws JsonProcessingException {
         return objectMapper.writeValueAsString(object);
     }
 }

@@ -12,13 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FlightExtrem"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.DetailActivity"></activity>
+        <activity android:name=".activity.DetailActivity" />
         <activity android:name=".activity.RegistroActivity" />
         <activity android:name=".activity.NuevaReservaActivity" />
         <activity android:name=".activity.DatosActivity" />
         <activity android:name=".activity.ReservasActivity" />
         <activity android:name=".activity.AboutActivity" />
-        <activity android:name=".activity.NavigationActivity" />
+        <activity android:name=".activity.HomeActivity" />
         <activity
             android:name=".activity.MainActivity"
             android:exported="true">

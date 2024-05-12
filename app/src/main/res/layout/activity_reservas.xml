@@ -4,6 +4,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondo_avion"
     tools:context=".activity.ReservasActivity">
 
     <LinearLayout
@@ -26,24 +27,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/edittext_custom"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="20dp">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/listaReservas"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/aniadir_button"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:paddingLeft="12dp"
                     android:scrollbars="vertical">
 
                 </androidx.recyclerview.widget.RecyclerView>
-            </LinearLayout>
+            </androidx.cardview.widget.CardView>
         </ScrollView>
 
     </LinearLayout>

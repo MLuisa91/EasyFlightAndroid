@@ -1,25 +1,20 @@
 package com.example.flightextrem.service.pojo;
 
-
-import java.io.Serializable;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Pais implements Serializable {
+public class ReservaViajeroPK implements Serializable {
 
-    private Integer id;
+    private String reservaId;
 
-    private String nombre;
-
-    public String toString() {
-        return nombre;
-    }
+    private Integer viajeroId;
 
 }

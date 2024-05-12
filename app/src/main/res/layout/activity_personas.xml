@@ -59,6 +59,18 @@
             android:layout_toEndOf="@id/recNombrePasajero"
             android:layout_toRightOf="@id/icPasajero" />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/recButtonClose"
+            android:src="@drawable/ic_baseline_clear_24"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@id/recPrecioBillete"
+            android:layout_toRightOf="@id/recPrecioBillete"
+            ></ImageView>
+
         <TextView
             android:layout_width="140dp"
             android:layout_height="wrap_content"
@@ -74,7 +86,7 @@
             android:maxLines="1"
             android:layout_marginBottom="12dp"/>
 
-        <TextView
+        <!--<TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txtExtras"
@@ -98,9 +110,9 @@
             android:layout_toRightOf="@id/txtExtras"
             android:layout_below="@id/recEsAdulto"
             android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="20dp"/>-->
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <!--<com.google.android.material.imageview.ShapeableImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:id="@+id/icExtras"
@@ -114,7 +126,39 @@
             android:layout_below="@id/recEsAdulto"
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded">
 
-        </com.google.android.material.imageview.ShapeableImageView>
+        </com.google.android.material.imageview.ShapeableImageView>-->
+        <!--<com.google.android.material.card.MaterialCardView
+            android:id="@+id/comboExtras"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:background="@drawable/edittext_custom"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:scaleType="centerCrop"
+            android:layout_toEndOf="@id/recExtras"
+            android:layout_toRightOf="@id/recExtras"
+            android:layout_below="@id/recEsAdulto"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/layoutComboExtras"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Seleccione extras"
+                    android:layout_centerInParent="true"
+                    ></TextView>
+
+
+
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>-->
 
     </RelativeLayout>
 

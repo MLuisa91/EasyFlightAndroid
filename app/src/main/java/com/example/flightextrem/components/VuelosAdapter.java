@@ -1,6 +1,7 @@
 package com.example.flightextrem.components;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,27 +10,29 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.flightextrem.R;
+import com.example.flightextrem.service.pojo.Vuelo;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.List;
 
 public class VuelosAdapter extends RecyclerView.Adapter<VuelosAdapter.ViewHolder> {
-    private List<ListVuelos> mData;
+    private List<Vuelo> mData;
     private LayoutInflater mInflater;
     private Context context;
     final VuelosAdapter.OnItemClickListener listener;
+    Boolean esOrigen;
 
     public interface OnItemClickListener {
-        void onItemClick(ListVuelos item);
+        void onItemClick(Vuelo item, Boolean esOrigen);
 
     }
 
-    public VuelosAdapter(List<ListVuelos> itemList, Context context, VuelosAdapter.OnItemClickListener listener) {
+    public VuelosAdapter(List<Vuelo> itemList, Boolean esOrigen, Context context, VuelosAdapter.OnItemClickListener listener) {
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.mData = itemList;
         this.listener = listener;
-
+        this.esOrigen = esOrigen;
     }
 
     @Override
@@ -48,7 +51,7 @@ public class VuelosAdapter extends RecyclerView.Adapter<VuelosAdapter.ViewHolder
         holder.bindData(mData.get(position));
     }
 
-    public void setItems(List<ListVuelos> vuelos) {
+    public void setItems(List<Vuelo> vuelos) {
         mData = vuelos;
     }
 
@@ -57,6 +60,7 @@ public class VuelosAdapter extends RecyclerView.Adapter<VuelosAdapter.ViewHolder
         TextView origenDestino;
         TextView precio;
         TextView fechaSalida;
+        TextView origenODestino;
 
         ViewHolder(View vista) {
             super(vista);
@@ -64,16 +68,21 @@ public class VuelosAdapter extends RecyclerView.Adapter<VuelosAdapter.ViewHolder
             origenDestino = vista.findViewById(R.id.recOrigenDestino);
             precio = vista.findViewById(R.id.recPrecio);
             fechaSalida = vista.findViewById(R.id.recFechaSalida);
+            origenODestino = vista.findViewById(R.id.recOrigenODestino);
         }
 
-        void bindData(final ListVuelos vuelos) {
-            origenDestino.setText(vuelos.getOrigen().concat("/").concat(vuelos.getDestino()));
+        void bindData(final Vuelo vuelos) {
+            String origen = esOrigen ? "Origen" : "Destino";
+            origenDestino.setText(vuelos.getOrigen().getNombre().concat("/").concat(vuelos.getDestino().getNombre()));
             precio.setText(vuelos.getPrecio().toString().concat(" EUR"));
             fechaSalida.setText(vuelos.getFechaSalida().toString());
+            origenODestino.setText(origen);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemClick(vuelos);
+                    itemView.setBackgroundColor(Color.parseColor("#407087"));
+                    listener.onItemClick(vuelos, esOrigen);
                 }
             });
         }
