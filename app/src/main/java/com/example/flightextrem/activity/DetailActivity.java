@@ -355,6 +355,7 @@ public class DetailActivity extends AppCompatActivity {
             List<String> extrasStr = new ArrayList<>();
             extras.forEach(extra -> {
                 extrasStr.add(extra.toString());
+
             });
 
             builder.setItems(extrasStr.toArray(new String[extrasStr.size()]), new DialogInterface.OnClickListener() {
