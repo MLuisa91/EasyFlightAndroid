@@ -73,7 +73,7 @@
             android:layout_marginBottom="12dp"/>
 
         <Button
-            android:id="@+id/aniadir_button"
+            android:id="@+id/ver_button"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="100dp"
@@ -84,6 +84,8 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             app:cornerRadius="20dp" />
+
+
 
     </RelativeLayout>
 

@@ -19,6 +19,7 @@ import com.example.flightextrem.R;
 import com.example.flightextrem.activity.MainActivity;
 import com.example.flightextrem.service.pojo.Extra;
 import com.example.flightextrem.service.pojo.Viajero;
+import com.example.flightextrem.service.pojo.Vuelo;
 import com.google.android.material.card.MaterialCardView;
 
 import java.time.LocalDate;
@@ -26,7 +27,7 @@ import java.util.List;
 
 public class PersonasAdapter extends RecyclerView.Adapter<PersonasAdapter.ViewHolder> {
     private List<Viajero> mData;
-    private List<Extra> mExtrasData;
+    private Vuelo mVueloData;
     private LayoutInflater mInflater;
     private Context context;
 
@@ -37,12 +38,12 @@ public class PersonasAdapter extends RecyclerView.Adapter<PersonasAdapter.ViewHo
     }
 
     public PersonasAdapter(List<Viajero> itemList,
-                           List<Extra> itemExtrasList,
+                           Vuelo itemVuelo,
                            Context context, PersonasAdapter.OnItemClickListener listener) {
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.mData = itemList;
-        this.mExtrasData = itemExtrasList;
+        this.mVueloData = itemVuelo;
         this.listener = listener;
 
     }
@@ -71,6 +72,7 @@ public class PersonasAdapter extends RecyclerView.Adapter<PersonasAdapter.ViewHo
         TextView nombre;
         TextView esAdulto;
         TextView apellidos;
+        TextView recPrecioBillete;
         LocalDate nacimiento;
         String dni;
         MaterialCardView materialCardView;
@@ -81,12 +83,14 @@ public class PersonasAdapter extends RecyclerView.Adapter<PersonasAdapter.ViewHo
             nombre = vista.findViewById(R.id.recNombrePasajero);
             esAdulto = vista.findViewById(R.id.recEsAdulto);
             materialCardView = vista.findViewById(R.id.comboExtras);
+            recPrecioBillete = vista.findViewById(R.id.recPrecioBillete);
             close = vista.findViewById(R.id.recButtonClose);
         }
 
         void bindData(final Viajero viajero) {
             nombre.setText(viajero.getNombre().concat(" ").concat(viajero.getApellidos()));
             esAdulto.setText("Adulto");
+            recPrecioBillete.setText(mVueloData.getPrecio().toString());
             close.setTag(viajero);
             close.setOnClickListener(new View.OnClickListener(){
 
@@ -102,40 +106,6 @@ public class PersonasAdapter extends RecyclerView.Adapter<PersonasAdapter.ViewHo
                     listener.onItemClick(viajero);
                 }
             });
-
-            /*materialCardView.setOnClickListener(v -> {
-                showDialog(v.getRootView());
-            });*/
-        }
-
-        private void showDialog(View view) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-            builder.setTitle("Seleccione los extras");
-
-            builder.setCancelable(false);
-
-            ArrayAdapter arrayAdapterPaises = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_item, mExtrasData);
-            arrayAdapterPaises.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            builder.setAdapter(arrayAdapterPaises, null);
-
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            }).setNeutralButton("Limpiar todo", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-
-            builder.show();
         }
 
         @Override

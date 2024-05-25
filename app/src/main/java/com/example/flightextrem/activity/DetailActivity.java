@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.collection.ArraySet;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,11 +29,16 @@ import com.example.flightextrem.components.PersonasAdapter;
 import com.example.flightextrem.service.ApiService;
 import com.example.flightextrem.service.HTTPClientRetrofit;
 import com.example.flightextrem.service.pojo.Extra;
-import com.example.flightextrem.service.pojo.Pais;
+import com.example.flightextrem.service.pojo.Oferta;
+import com.example.flightextrem.service.pojo.Reserva;
+import com.example.flightextrem.service.pojo.ReservaExtra;
+import com.example.flightextrem.service.pojo.ReservaViajero;
+import com.example.flightextrem.service.pojo.Usuario;
 import com.example.flightextrem.service.pojo.Viajero;
 import com.example.flightextrem.service.pojo.Vuelo;
 import com.example.flightextrem.utils.JsonConverter;
 import com.example.flightextrem.utils.Utiles;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.android.material.card.MaterialCardView;
 
 import java.time.Duration;
@@ -43,7 +47,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 
+import lombok.SneakyThrows;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,12 +60,17 @@ public class DetailActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     LinearLayout home, nueva, reservas, datos, about, exit;
     CardView cardDestino;
+    Usuario usuario;
+    Vuelo vueloIda;
+    Vuelo destino;
+    Oferta oferta;
+    List<Reserva> reservaList;
     List<Viajero> personas;
     List<Extra> extras;
     List<Extra> extrasSelect = new ArrayList<>();
     TextView fechaNacimiento, txtHoraSalida, txtHoraDestino, txtFechaSalida, txtFechaDestino, txtDuracion,
             txtHoraOrigenVuelta, txtHoraDestinoVuelta, txtFechaSalidaVuelta, txtFechaDestinoVuelta, txtDuracionVuelta,
-            txtViajeroNombre, txtViajeroApellidos, txtFechaNacimiento, txtViajeroDni, listaExtras;
+            txtViajeroNombre, txtViajeroApellidos, txtFechaNacimiento, txtViajeroDni, listaExtras, totalReserva;
     RecyclerView listaPasajeros;
     MaterialCardView materialCardView;
     private HTTPClientRetrofit httpClientRetrofit;
@@ -74,9 +85,10 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    public static void redirectActivity(Activity activity, Class secondActivity) {
+    public void redirectActivity(Activity activity, Class secondActivity) {
         Intent intent = new Intent(activity, secondActivity);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("USUARIO", usuario);
         activity.startActivity(intent);
         activity.finish();
     }
@@ -114,8 +126,8 @@ public class DetailActivity extends AppCompatActivity {
         txtViajeroDni = findViewById(R.id.txtViajeroDni);
         materialCardView = findViewById(R.id.comboExtras);
         listaExtras = findViewById(R.id.listaExtras);
+        totalReserva = findViewById(R.id.totalReserva);
         httpClientRetrofit = new HTTPClientRetrofit();
-
 
 
         menu.setOnClickListener(new View.OnClickListener() {
@@ -164,8 +176,38 @@ public class DetailActivity extends AppCompatActivity {
             showDialog(v.getRootView());
         });
 
+        usuario = getUsuarioContext();
+
         initDatePickers();
         init();
+    }
+
+    /**
+     * para obtener el usuario del contexto
+     *
+     * @return Usuario
+     */
+    public Usuario getUsuarioContext() {
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            return null;
+        } else {
+            return (Usuario) extras.get("USUARIO");
+        }
+    }
+
+    /**
+     * para obtener el parámetro de la oferta seleccionada del contexto
+     *
+     * @return Usuario
+     */
+    public Oferta getOfertaContext() {
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            return null;
+        } else {
+            return (Oferta) extras.get("OFERTA");
+        }
     }
 
     @Override
@@ -176,18 +218,22 @@ public class DetailActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void init() {
-        Vuelo origen = recogeParametro("VUELO_ORIGEN");
-        Vuelo destino = recogeParametro("VUELO_DESTINO");
+        vueloIda = recogeParametro("VUELO_ORIGEN");
+        destino = recogeParametro("VUELO_DESTINO");
+        oferta = getOfertaContext();
+        if(oferta!=null){
+            vueloIda = oferta.getVuelo();
+        }
         personas = new ArrayList<>();
         extras = new ArrayList<>();
 
-        cargaOrigen(origen);
+        cargaOrigen(vueloIda);
         cargaDestino(destino);
+        obtenerVuelos(vueloIda);
         cargarExtras();
-
     }
 
-    private void cargarExtras(){
+    private void cargarExtras() {
         JsonConverter<Extra[]> jsonConverter = new JsonConverter(Extra[].class);
         ApiService apiService = httpClientRetrofit.getHttpRetrofitConection().create(ApiService.class);
         apiService.callExtras().enqueue(new Callback<String>() {
@@ -212,11 +258,13 @@ public class DetailActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void cargaOrigen(Vuelo origen) {
-        txtHoraSalida.setText(origen.getHoraSalida().toString() + " " + origen.getOrigen().getNombre());
-        txtHoraDestino.setText(origen.getHoraLlegada().toString() + " " + origen.getDestino().getNombre());
-        txtFechaSalida.setText(origen.getFechaSalida().toString());
-        txtFechaDestino.setText(origen.getFechaSalida().toString());
-        txtDuracion.setText("Duración del vuelo: " + Duration.between(origen.getHoraSalida(), origen.getHoraLlegada()).toHours() + " h");
+        //if(origen != null){
+            txtHoraSalida.setText(origen.getHoraSalida().toString() + " " + origen.getOrigen().getNombre());
+            txtHoraDestino.setText(origen.getHoraLlegada().toString() + " " + origen.getDestino().getNombre());
+            txtFechaSalida.setText(origen.getFechaSalida().toString());
+            txtFechaDestino.setText(origen.getFechaSalida().toString());
+            txtDuracion.setText("Duración del vuelo: " + Duration.between(origen.getHoraSalida(), origen.getHoraLlegada()).toHours() + " h");
+        //}
     }
 
     @SuppressLint({"WrongConstant", "SetTextI18n"})
@@ -281,33 +329,33 @@ public class DetailActivity extends AppCompatActivity {
         String errores = "";
         Boolean correcto = true;
         String dni = txtViajeroDni.getText().toString();
-        if(dni.isEmpty()){
+        if (dni.isEmpty()) {
             errores += "El campo dni es obligatorio.\n";
             correcto = false;
-        }else{
-            if(!Utiles.validarDNI(dni)){
+        } else {
+            if (!Utiles.validarDNI(dni)) {
                 errores += "El dni no tiene el formato correcto.\n";
                 correcto = false;
             }
         }
 
         String nombre = txtViajeroNombre.getText().toString();
-        if(nombre.isEmpty()){
+        if (nombre.isEmpty()) {
             errores += "El campo nombre es obligatorio.\n";
             correcto = false;
-        }else{
-            if(Utiles.validarSiNumero(nombre)){
+        } else {
+            if (Utiles.validarSiNumero(nombre)) {
                 errores += "Escriba el nombre correctamente.\n";
                 correcto = false;
             }
         }
 
         String apellido = txtViajeroApellidos.getText().toString();
-        if(apellido.isEmpty()){
+        if (apellido.isEmpty()) {
             errores += "El campo apellido es obligatorio.\n";
             correcto = false;
-        }else{
-            if(Utiles.validarSiNumero(apellido)){
+        } else {
+            if (Utiles.validarSiNumero(apellido)) {
                 errores += "Escriba los apellidos correctamente.\n";
                 correcto = false;
             }
@@ -315,31 +363,38 @@ public class DetailActivity extends AppCompatActivity {
 
         String fechaNacimiento = txtFechaNacimiento.getText().toString();
         LocalDate fecha = null;
-        if(fechaNacimiento.isEmpty()){
+        if (fechaNacimiento.isEmpty()) {
             errores += "El campo fecha nacimiento es obligatorio.\n";
             correcto = false;
-        }else{
-            /*if (!Utiles.validarPatron(fechaNacimiento,"([0-9]{2,})([/])([0-9]{2,})([/])([0-9]{4,})")) {
+        } else {
+            if (!Utiles.validarPatron(fechaNacimiento,"([0-9]{2,})([/])([0-9]{2,})([/])([0-9]{4,})")) {
                 errores += "El formato de la fecha no es correcto.\n";
                 correcto = false;
-            } else {*/
+            } else {
                 fecha = Utiles.convertirADate(fechaNacimiento);
-            //}
+            }
         }
 
-        if(correcto){
+        if (correcto) {
             personas.add(new Viajero(null, dni, nombre, apellido, fecha));
-            PersonasAdapter adapter = new PersonasAdapter(personas, extras, this, new PersonasAdapter.OnItemClickListener() {
+            PersonasAdapter adapter = new PersonasAdapter(personas, vueloIda, this, new PersonasAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(Viajero item) {
-
+                    calcularTotalReserva();
+                }
+            });
+            adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onChanged() {
+                    calcularTotalReserva();
                 }
             });
             RecyclerView recyclerView = findViewById(R.id.listaPasajeros);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(adapter);
-        }else {
+            calcularTotalReserva();
+        } else {
             Toast.makeText(DetailActivity.this, errores, Toast.LENGTH_LONG).show();
         }
 
@@ -355,15 +410,19 @@ public class DetailActivity extends AppCompatActivity {
             List<String> extrasStr = new ArrayList<>();
             extras.forEach(extra -> {
                 extrasStr.add(extra.toString());
-
             });
 
             builder.setItems(extrasStr.toArray(new String[extrasStr.size()]), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Extra extraSelec = extras.get(which);
-                    listaExtras.setText(listaExtras.getText().toString().concat(extraSelec.getNombre().concat(" ")));
-                    extrasSelect.add(extraSelec);
+                    if(!extrasSelect.contains(extraSelec)) {
+                        listaExtras.setText(listaExtras.getText().toString().concat(extraSelec.getNombre().concat("; ")));
+                        extrasSelect.add(extraSelec);
+                        calcularTotalReserva();
+                    }else{
+                        Toast.makeText(DetailActivity.this, "El extra seleccionado ya existe en la lista de selección.", Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }
@@ -371,8 +430,108 @@ public class DetailActivity extends AppCompatActivity {
         builder.show();
     }
 
-    public void reservar(View view) {
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private Double calcularTotalReserva() {
+        Double total = new Double(0);
 
+        // calculamos primero el total de los billetes simples
+        total += (vueloIda.getPrecio() + (destino != null ? destino.getPrecio() : new Double(0))) * personas.size();
+        // despues vamos recorriendo la lista de extras y se las sumamos al total
+        for (Extra extra : extrasSelect) {
+            total += extra.getCoste();
+        }
+        if(oferta!=null)
+            total = total - (total * oferta.getDescuento());
+
+        totalReserva.setText(total.toString().concat(" EUR"));
+        return total;
+    }
+
+    /**
+     * Guarda la reserva realizada por el usuario
+     * @param view
+     * @throws JsonProcessingException
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void reservar(View view) throws JsonProcessingException {
+
+        Set<ReservaExtra> reservaExtraSet = new ArraySet<>();
+        Double total = this.calcularTotalReserva();
+        for (Extra extra : extrasSelect) {
+            reservaExtraSet.add(new ReservaExtra(null, null, extra));
+        }
+        Set<ReservaViajero> reservaViajeroSet = new ArraySet<>();
+        for (Viajero persona : personas) {
+            reservaViajeroSet.add(new ReservaViajero(null, null, persona));
+        }
+        // generar la reserva y llamar a la api para guardarla en base de datos
+        Reserva reserva = new Reserva(null, Utiles.generarCodigoReservas(), usuario, vueloIda, destino, oferta, personas.size(), total,
+                reservaExtraSet, null, reservaViajeroSet);
+        if(compruebaDisponibilidad(reserva)) {
+            JsonConverter<Reserva> converter = new JsonConverter<>(Reserva.class);
+            converter.objectToJson(reserva);
+            ApiService apiService = httpClientRetrofit.getHttpRetrofitConection().create(ApiService.class);
+            apiService.callInsertarReserva(reserva).enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    if (call.isExecuted() && response.body() != null) {
+                        Toast.makeText(DetailActivity.this, "La reserva se ha registrado correctamente.", Toast.LENGTH_LONG).show();
+                        // aquí hay que llamar a la api para generar el código QR de la reserva
+                    } else {
+                        Toast.makeText(DetailActivity.this, "Ha ocurrido un problema con el registro de la reserva.", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(DetailActivity.this, "Ha ocurrido un problema con el registro de la reserva.", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
 
     }
+
+    /**
+     * Comprueba la disponibilidad de la reserva
+     * @param reserva
+     * @return
+     */
+    @SneakyThrows
+    private boolean compruebaDisponibilidad(Reserva reserva) {
+        boolean disponible = true;
+        Long totalViajeros = 0L;
+        for(Reserva r : reservaList){
+            totalViajeros += r.getReservaViajeros().stream().count();
+        }
+        if(reserva.getVueloIda().getAvion().getPasajeros() < totalViajeros + reserva.getReservaViajeros().size()){
+            Toast.makeText(DetailActivity.this, "Se ha superado el límite de pasajeros para este vuelo.", Toast.LENGTH_LONG).show();
+            disponible = false;
+        }
+
+        return disponible;
+    }
+
+    private void obtenerVuelos(Vuelo vuelo) {
+        JsonConverter<Reserva[]> converter = new JsonConverter<>(Reserva[].class);
+
+        ApiService apiService = httpClientRetrofit.getHttpRetrofitConection().create(ApiService.class);
+        apiService.callReservas(new Reserva(vuelo)).enqueue(new Callback<String>() {
+            @SneakyThrows
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (call.isExecuted() && response.body() != null) {
+                    reservaList = Arrays.asList(converter.jsonToObject(response.body()));
+                } else {
+                    Toast.makeText(DetailActivity.this, "Ha ocurrido un problema con la disponibilidad del vuelo.", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(DetailActivity.this, "Ha ocurrido un problema con la disponibilidad del vuelo.", Toast.LENGTH_LONG).show();
+            }
+
+        });
+    }
+
 }

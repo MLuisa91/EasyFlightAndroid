@@ -18,6 +18,7 @@ import com.example.flightextrem.service.pojo.Usuario;
 import com.example.flightextrem.utils.JsonConverter;
 import com.example.flightextrem.utils.Utiles;
 
+import lombok.SneakyThrows;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,6 +79,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        initBackup();
+
+    }
+
+    @SneakyThrows
+    private void initBackup() {
+        ApiService apiService = httpClientRetrofit.getHttpRetrofitConection().create(ApiService.class);
+        apiService.callBackup().enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
     }
 
     public void nuevoRegistro(View view) {

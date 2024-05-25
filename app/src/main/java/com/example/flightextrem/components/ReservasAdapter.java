@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,6 +58,7 @@ public class ReservasAdapter extends RecyclerView.Adapter<ReservasAdapter.ViewHo
         TextView idReserva;
         TextView precio;
         TextView fechaReserva;
+        Button botonVer;
 
         ViewHolder(View vista) {
             super(vista);
@@ -64,13 +66,14 @@ public class ReservasAdapter extends RecyclerView.Adapter<ReservasAdapter.ViewHo
             idReserva = vista.findViewById(R.id.recIdReserva);
             precio = vista.findViewById(R.id.recPrecioReserva);
             fechaReserva = vista.findViewById(R.id.recFechaReserva);
+            botonVer = vista.findViewById(R.id.ver_button);
         }
 
         void bindData(final Reserva reservas) {
-            idReserva.setText(reservas.getId());
+            idReserva.setText(reservas.getCode());
             precio.setText(reservas.getTotal().toString().concat(" EUR"));
             fechaReserva.setText(reservas.getFechaReserva().toString());
-            itemView.setOnClickListener(new View.OnClickListener() {
+            botonVer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onItemClick(reservas);

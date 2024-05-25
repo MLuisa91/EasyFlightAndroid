@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -79,7 +80,7 @@ public class Utiles {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static LocalDate convertirADate(String fecha){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
 
         try {
             return LocalDate.parse(fecha, formatter);
@@ -230,5 +231,22 @@ public class Utiles {
         catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String generarCodigoReservas() {
+        String letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String numeros = "0123456789";
+        Random random = new Random();
+        StringBuilder codigo = new StringBuilder();
+
+        for (int i = 0; i < 4; i++) {
+            codigo.append(letras.charAt(random.nextInt(letras.length())));
+        }
+
+        for (int i = 0; i < 2; i++) {
+            codigo.append(numeros.charAt(random.nextInt(numeros.length())));
+        }
+
+        return codigo.toString();
     }
 }

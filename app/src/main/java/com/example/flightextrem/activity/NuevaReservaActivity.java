@@ -26,6 +26,8 @@ import com.example.flightextrem.components.VuelosAdapter;
 import com.example.flightextrem.service.ApiService;
 import com.example.flightextrem.service.HTTPClientRetrofit;
 import com.example.flightextrem.service.pojo.Aeropuerto;
+import com.example.flightextrem.service.pojo.Oferta;
+import com.example.flightextrem.service.pojo.Reserva;
 import com.example.flightextrem.service.pojo.Usuario;
 import com.example.flightextrem.service.pojo.Vuelo;
 import com.example.flightextrem.utils.JsonConverter;
@@ -48,6 +50,7 @@ import retrofit2.Response;
 public class NuevaReservaActivity extends AppCompatActivity {
 
     private static Usuario usuario;
+    private static Oferta oferta;
     ImageView menu;
     DrawerLayout drawerLayout;
     LinearLayout home, nueva, reservas, datos, about, exit;
@@ -73,6 +76,8 @@ public class NuevaReservaActivity extends AppCompatActivity {
     public static void redirectActivity(Activity activity, Class secondActivity) {
         Intent intent = new Intent(activity, secondActivity);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("USUARIO", usuario);
         activity.startActivity(intent);
         activity.finish();
     }
@@ -143,6 +148,7 @@ public class NuevaReservaActivity extends AppCompatActivity {
         initDatePickers();
         initSpinners();
         usuario = getUsuarioContext();
+        oferta = getOfertaContext();
         usuarioLogin.setText("Bienvenido, " + usuario.getNombre().concat(" ").concat(usuario.getApellidos()));
     }
 
@@ -157,6 +163,15 @@ public class NuevaReservaActivity extends AppCompatActivity {
             return null;
         } else {
             return (Usuario) extras.get("USUARIO");
+        }
+    }
+
+    public Oferta getOfertaContext() {
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            return null;
+        } else {
+            return (Oferta) extras.get("OFERTA");
         }
     }
 
@@ -183,6 +198,7 @@ public class NuevaReservaActivity extends AppCompatActivity {
                             goToDetail(item, esOrigen);
                         }
                     });
+
                     RecyclerView recyclerView = findViewById(R.id.listaVuelos);
                     recyclerView.setHasFixedSize(true);
                     recyclerView.setLayoutManager(new LinearLayoutManager(NuevaReservaActivity.this));
@@ -364,12 +380,16 @@ public class NuevaReservaActivity extends AppCompatActivity {
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void reservar(View view) {
+
         Intent detailIntent = new Intent(this, DetailActivity.class);
         Boolean redirecciona = true;
         Optional<Vuelo> origen = vuelosMap.entrySet().stream().filter(key -> key.getKey().equals("origen"))
                 .map(valor -> valor.getValue())
                 .findFirst();
         Optional<Vuelo> destino = Optional.empty();
+        if(oferta!=null){
+
+        }
         if (!String.valueOf(fechaVuelta.getText()).equals("")) {
             Long total = vuelosMap.keySet().stream().distinct().count();
             if (total == 2) {
@@ -388,7 +408,10 @@ public class NuevaReservaActivity extends AppCompatActivity {
 
         if(redirecciona) {
             detailIntent.putExtra("VUELO_ORIGEN", origen.get());
+            detailIntent.putExtra("USUARIO", usuario);
             startActivity(detailIntent);
         }
     }
+
+
 }

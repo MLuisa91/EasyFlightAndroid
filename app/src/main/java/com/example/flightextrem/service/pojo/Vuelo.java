@@ -1,6 +1,10 @@
 package com.example.flightextrem.service.pojo;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,6 +18,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Vuelo implements Serializable {
 
     private String id;
@@ -22,6 +27,7 @@ public class Vuelo implements Serializable {
 
     private Aeropuerto destino;
 
+    @SerializedName("fechaSalida")
     private LocalDate fechaSalida;
 
     private LocalTime horaSalida;

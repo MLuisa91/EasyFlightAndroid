@@ -1,5 +1,7 @@
 package com.example.flightextrem.service.pojo;
 
+import com.google.gson.annotations.SerializedName;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,7 @@ public class Viajero implements Serializable {
 
     private String apellidos;
 
+    //@SerializedName("fechaNacimiento")
     private LocalDate fechaNacimiento;
 
 }

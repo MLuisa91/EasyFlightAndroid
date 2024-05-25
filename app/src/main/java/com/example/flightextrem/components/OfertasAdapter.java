@@ -15,6 +15,7 @@ import com.example.flightextrem.activity.DetailActivity;
 import com.example.flightextrem.activity.HomeActivity;
 import com.example.flightextrem.activity.MainActivity;
 import com.example.flightextrem.service.pojo.Oferta;
+import com.example.flightextrem.service.pojo.Usuario;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class OfertasAdapter extends RecyclerView.Adapter<OfertasAdapter.ViewHold
     private List<Oferta> mData;
     private LayoutInflater mInflater;
     private Context context;
+    private Usuario user;
     final OfertasAdapter.OnItemClickListener listener;
 
     public interface OnItemClickListener {
@@ -30,12 +32,12 @@ public class OfertasAdapter extends RecyclerView.Adapter<OfertasAdapter.ViewHold
 
     }
 
-    public OfertasAdapter(List<Oferta> itemList, Context context, OfertasAdapter.OnItemClickListener listener) {
+    public OfertasAdapter(List<Oferta> itemList, Usuario user, Context context, OfertasAdapter.OnItemClickListener listener) {
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.mData = itemList;
         this.listener = listener;
-
+        this.user = user;
     }
 
     @Override
@@ -78,7 +80,8 @@ public class OfertasAdapter extends RecyclerView.Adapter<OfertasAdapter.ViewHold
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), DetailActivity.class);
-                    intent.putExtra("VUELO", ofertas.getVuelo());
+                    intent.putExtra("OFERTA", ofertas);
+                    intent.putExtra("USUARIO", user);
                     v.getContext().startActivity(intent);
                 }
             });

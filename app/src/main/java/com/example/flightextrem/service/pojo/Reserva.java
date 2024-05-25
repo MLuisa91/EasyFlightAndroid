@@ -1,6 +1,8 @@
 package com.example.flightextrem.service.pojo;
 
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
@@ -17,11 +19,13 @@ import lombok.Setter;
 public class Reserva implements Serializable {
 
 
-    private String id;
+    private Integer id;
+    private String code;
 
     private Usuario usuario;
 
-    private Vuelo vuelo;
+    private Vuelo vueloIda;
+    private Vuelo vueloVuelta;
 
     private Oferta oferta;
 
@@ -30,7 +34,11 @@ public class Reserva implements Serializable {
     private Double total;
 
     private Set<ReservaExtra> reservaExtras;
+    @SerializedName("fechaReserva")
     private LocalDate fechaReserva;
     Set<ReservaViajero> reservaViajeros;
 
+    public Reserva(Vuelo vueloIda){
+        this.vueloIda = vueloIda;
+    }
 }

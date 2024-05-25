@@ -28,6 +28,7 @@ import com.example.flightextrem.service.pojo.Usuario;
 import com.example.flightextrem.service.pojo.Vuelo;
 import com.example.flightextrem.utils.JsonConverter;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -114,7 +115,7 @@ public class HomeActivity extends AppCompatActivity {
 
         init();
         usuario = getUsuarioContext();
-        if(usuario != null)
+        if (usuario != null)
             usuarioLogin.setText("Bienvenido, " + usuario.getNombre().concat(" ").concat(usuario.getApellidos()));
 
     }
@@ -169,7 +170,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onResponse(Call<String> call, Response<String> response) {
                 if(call.isExecuted() && response.body() != null){
                     ofertas = Arrays.asList(jsonConverter.jsonToObject(response.body()).clone());
-                    OfertasAdapter adapter = new OfertasAdapter(ofertas, HomeActivity.this, new OfertasAdapter.OnItemClickListener() {
+                    OfertasAdapter adapter = new OfertasAdapter(ofertas,  usuario,HomeActivity.this, new OfertasAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(Oferta item) {
 
@@ -178,7 +179,6 @@ public class HomeActivity extends AppCompatActivity {
                     RecyclerView recyclerView = findViewById(R.id.listaOfertas);
                     reciclerviewLayoutManager
                             = new GridLayoutManager(getApplicationContext(), 3, GridLayoutManager.VERTICAL, false);
-                    ;
 
                     // Set LayoutManager on Recycler View
                     recyclerView.setLayoutManager(

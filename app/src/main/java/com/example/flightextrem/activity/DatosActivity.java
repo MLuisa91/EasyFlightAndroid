@@ -183,7 +183,7 @@ public class DatosActivity extends AppCompatActivity {
             this.user.setText(usuario.getUser());
 
         if (usuario.getPassword() != null)
-            this.password.setText(usuario.getPassword());
+            this.password.setText(Utiles.desencriptarMD5(usuario.getPassword()));
 
 
     }
@@ -202,6 +202,8 @@ public class DatosActivity extends AppCompatActivity {
     public static void redirectActivity(Activity activity, Class secondActivity) {
         Intent intent = new Intent(activity, secondActivity);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("USUARIO", usuarioContext);
         activity.startActivity(intent);
         activity.finish();
     }

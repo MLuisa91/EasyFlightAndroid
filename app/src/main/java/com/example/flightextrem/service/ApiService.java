@@ -8,6 +8,9 @@ import com.example.flightextrem.service.pojo.Reserva;
 import com.example.flightextrem.service.pojo.Usuario;
 import com.example.flightextrem.service.pojo.Vuelo;
 
+import java.io.OutputStream;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -15,6 +18,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Streaming;
 
 public interface ApiService {
 
@@ -45,6 +49,13 @@ public interface ApiService {
     @GET("reservas/{id}")
     Call<String> callReservaById(@Path("id") String id);
 
+    @GET("reservas/reservas-user/{usuario}")
+    Call<String> callReservaByUsuario(@Path("usuario") Integer usuario);
+
+    //@Streaming
+    @GET("reservas/generateQr/{id}")
+    Call<ResponseBody> callReservasQr(@Path("id") Integer reserva);
+
     @PUT("reservas/actualizar")
     Call<String> callActualizarReserva(@Body Reserva reserva);
 
@@ -54,7 +65,7 @@ public interface ApiService {
     @DELETE("reservas/{id}")
     Call<String> callDeleteReserva(@Path("id") String id);
 
-    @POST("ofertas/search")
+    @POST("ofertas/ofertasValidas")
     Call<String> callSearchOferta(@Body Oferta oferta);
 
     @POST("vuelos/searchLimitado")
@@ -62,5 +73,8 @@ public interface ApiService {
 
     @POST("extras/search")
     Call<String> callExtras();
+
+    @POST("respaldos/create")
+    Call<String> callBackup();
 
 }
