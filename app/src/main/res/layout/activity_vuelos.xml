@@ -89,6 +89,21 @@
             android:textSize="16sp"
             android:gravity="center_horizontal" />
 
+        <TextView
+            android:visibility="gone"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/vueloSeleccionado"
+            android:text="NO"
+            android:layout_toEndOf="@id/recFechaSalida"
+            android:layout_marginLeft="90dp"
+            android:layout_toRightOf="@id/recFechaSalida"
+            android:textAlignment="center"
+            android:gravity="center_horizontal"
+            />
+
 
 
     </RelativeLayout>

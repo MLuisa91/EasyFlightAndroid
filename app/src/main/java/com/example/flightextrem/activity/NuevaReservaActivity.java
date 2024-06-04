@@ -185,6 +185,7 @@ public class NuevaReservaActivity extends AppCompatActivity {
     public void search(Vuelo vuelo, Boolean isOrigen) {
         JsonConverter<Vuelo[]> jsonConverter = new JsonConverter(Vuelo[].class);
         vuelos = new ArrayList<>();
+        vuelosMap = new HashMap<>();
         ApiService apiService = httpClientRetrofit.getHttpRetrofitConection().create(ApiService.class);
         apiService.callVuelos(vuelo).enqueue(new Callback<String>() {
             @SneakyThrows
@@ -194,8 +195,8 @@ public class NuevaReservaActivity extends AppCompatActivity {
                     vuelos = Arrays.asList(jsonConverter.jsonToObject(response.body()).clone());
                     VuelosAdapter adapter = new VuelosAdapter(vuelos, isOrigen, NuevaReservaActivity.this, new VuelosAdapter.OnItemClickListener() {
                         @Override
-                        public void onItemClick(Vuelo item, Boolean esOrigen) {
-                            goToDetail(item, esOrigen);
+                        public void onItemClick(Vuelo item, Boolean esOrigen, Boolean isSelected) {
+                            goToDetail(item, esOrigen, isSelected);
                         }
                     });
 
@@ -218,13 +219,18 @@ public class NuevaReservaActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void goToDetail(Vuelo item, Boolean esOrigen) {
+    private void goToDetail(Vuelo item, Boolean esOrigen, Boolean isSelected) {
         if (!esOrigen) {
-            vuelosMap.put("vuelta", item);
-        } else {
-            vuelosMap.put("origen", item);
+            if(isSelected)
+                vuelosMap.put("vuelta", item);
+            else
+                vuelosMap.remove("vuelta");
+        } else if(esOrigen){
+            if(isSelected)
+                vuelosMap.put("origen", item);
+            else
+                vuelosMap.remove("origen");
         }
-
     }
 
     /**
@@ -356,8 +362,12 @@ public class NuevaReservaActivity extends AppCompatActivity {
         if (salida.isEmpty()) {
             errores += "Seleccione una fecha de salida para el vuelo \n";
             correcto = false;
-        } else {
+        } else{
             salidaDate = Utiles.convertirADate(salida);
+            if(!Utiles.validarFecha(salidaDate)){
+                errores += "La fecha de salida no debe ser anterior a la actual.\n";
+                correcto = false;
+            }
         }
 
         if (correcto) {
@@ -387,9 +397,7 @@ public class NuevaReservaActivity extends AppCompatActivity {
                 .map(valor -> valor.getValue())
                 .findFirst();
         Optional<Vuelo> destino = Optional.empty();
-        if(oferta!=null){
 
-        }
         if (!String.valueOf(fechaVuelta.getText()).equals("")) {
             Long total = vuelosMap.keySet().stream().distinct().count();
             if (total == 2) {

@@ -23,7 +23,7 @@ public class VuelosAdapter extends RecyclerView.Adapter<VuelosAdapter.ViewHolder
     Boolean esOrigen;
 
     public interface OnItemClickListener {
-        void onItemClick(Vuelo item, Boolean esOrigen);
+        void onItemClick(Vuelo item, Boolean esOrigen, Boolean seleccionado);
 
     }
 
@@ -61,6 +61,7 @@ public class VuelosAdapter extends RecyclerView.Adapter<VuelosAdapter.ViewHolder
         TextView precio;
         TextView fechaSalida;
         TextView origenODestino;
+        TextView seleccionado;
 
         ViewHolder(View vista) {
             super(vista);
@@ -69,6 +70,7 @@ public class VuelosAdapter extends RecyclerView.Adapter<VuelosAdapter.ViewHolder
             precio = vista.findViewById(R.id.recPrecio);
             fechaSalida = vista.findViewById(R.id.recFechaSalida);
             origenODestino = vista.findViewById(R.id.recOrigenODestino);
+            seleccionado = vista.findViewById(R.id.vueloSeleccionado);
         }
 
         void bindData(final Vuelo vuelos) {
@@ -81,8 +83,15 @@ public class VuelosAdapter extends RecyclerView.Adapter<VuelosAdapter.ViewHolder
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    itemView.setBackgroundColor(Color.parseColor("#407087"));
-                    listener.onItemClick(vuelos, esOrigen);
+                    if(seleccionado.getText().toString().equals("NO")){
+                        itemView.setBackgroundColor(Color.parseColor("#407087"));
+                        seleccionado.setText("SI");
+                    }else{
+                        itemView.setBackgroundColor(Color.WHITE);
+                        seleccionado.setText("NO");
+                    }
+                    Boolean isSelected = seleccionado.getText().equals("NO") ? false : true;
+                    listener.onItemClick(vuelos, esOrigen, isSelected);
                 }
             });
         }

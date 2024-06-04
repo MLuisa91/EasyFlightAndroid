@@ -24,6 +24,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class Utiles {
 
     private static final String SECRETKEY = "EasyFlight";
+    private static final String IV = "0123456789123456";
 
     public static boolean validarPatron(String cadena, String patron){
         Pattern pattern = Pattern.compile(patron);
@@ -198,16 +199,9 @@ public class Utiles {
 
     public static String encriptarAMD5(String input) {
         try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            md5.update(SECRETKEY.getBytes("utf-8"));
-            byte[] mensajeDiggester = md5.digest(input.getBytes());
-            BigInteger numero = new BigInteger(1, mensajeDiggester);
-            String tieneTexto = numero.toString(16);
+            PasswordEncrypter password = new PasswordEncrypter();
+            return password.encrypt(input,IV,SECRETKEY);
 
-            while (tieneTexto.length() < 32) {
-                tieneTexto = "0" + tieneTexto;
-            }
-            return tieneTexto;
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -217,16 +211,9 @@ public class Utiles {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static String desencriptarMD5(String passwordBD){
         try {
-            byte[] mensaje= Base64.getDecoder().decode(passwordBD.getBytes("utf-8"));
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            byte[] password = md5.digest(SECRETKEY.getBytes("utf-8"));
-            byte[] keyPassword = Arrays.copyOf(password,24);
-            SecretKey key = new SecretKeySpec(keyPassword, "DESede");
-            Cipher descipher = Cipher.getInstance("DESede");
-            descipher.init(Cipher.DECRYPT_MODE, key);
-            byte[] plaintext = descipher.doFinal(mensaje);
+            PasswordEncrypter password = new PasswordEncrypter();
+            return password.decrypt(passwordBD,IV,SECRETKEY);
 
-            return new String(plaintext, "UTF-8");
         }
         catch (Exception e) {
             throw new RuntimeException(e);
